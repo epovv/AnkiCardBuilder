@@ -1,0 +1,6 @@
+api_key=
+lang_from=ru
+lang_to=en
+anki_model_name=default
+anki_deck_name=default
+anki_host=http://localhost:8765
