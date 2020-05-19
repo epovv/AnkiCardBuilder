@@ -28,14 +28,6 @@ class Settings:
         self.anki_actions = actions
         self.user_action = None
 
-    @property
-    def user_action(self):
-        return self.__user_action
-
-    @user_action.setter
-    def user_action(self, action: str):
-        self.__user_action = action
-
     def get_anki_action_by_user_action(self, user_action) -> str:
         """
         Chose type Anki action
@@ -51,3 +43,20 @@ class Settings:
             raise Exception('Action not found')
 
         return anki_action_by_user_action
+
+    def get_external_settings(self):
+        with open('config.txt', 'r') as f:
+            for line in f:
+                new_line = line.strip().split('=')
+                if new_line[0] == 'api_key':
+                    self.api_key = new_line[1]
+                elif new_line[0] == 'lang_from':
+                    self.lang_from = new_line[1]
+                elif new_line[0] == 'lang_to':
+                    self.lang_to = new_line[1]
+                elif new_line[0] == 'anki_model_name':
+                    self.anki_model_name = new_line[1]
+                elif new_line[0] == 'anki_deck_name':
+                    self.anki_deck_name = new_line[1]
+                elif new_line[0] == 'anki_host':
+                    self.anki_host = new_line[1]

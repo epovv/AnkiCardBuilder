@@ -55,21 +55,7 @@ class MainDispatcher:
 if __name__ == '__main__':
 
     settings = Settings()
-    with open('config.txt', 'r') as f:
-        for line in f:
-            new_line = line.strip().split('=')
-            if new_line[0] == 'api_key':
-                settings.api_key = new_line[1]
-            elif new_line[0] == 'lang_from':
-                settings.lang_from = new_line[1]
-            elif new_line[0] == 'lang_to':
-                settings.lang_to = new_line[1]
-            elif new_line[0] == 'anki_model_name':
-                settings.anki_model_name = new_line[1]
-            elif new_line[0] == 'anki_deck_name':
-                settings.anki_deck_name = new_line[1]
-            elif new_line[0] == 'anki_host':
-                settings.anki_host = new_line[1]
+    settings.get_external_settings()
 
     while True:
         try:

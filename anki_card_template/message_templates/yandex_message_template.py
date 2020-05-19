@@ -49,19 +49,33 @@ class JsonYandexMessageTemplate(AbstractMessageTemplate):
             translate = ''
 
             for tr in pos['tr']:
-                translate += f"{tr['text']} "
+                translate += f"- {tr['text']} "
 
                 syn = tr.get('syn')
-                if syn is not None:
-                    syn_string = ', '.join([word['text'] for word in syn])
-                    translate += f"&nbsp;(Synonyms: {syn_string})"
-                translate += '<br>&nbsp;&nbsp;&nbsp;&nbsp;'
+                example = tr.get('ex')
+                translate = self.add_syn_and_example(syn, example, translate)
 
             back += f"Part of speech: {pos['pos']}<br>" \
-                    f"Translate:<br>&nbsp;&nbsp;&nbsp;&nbsp;{translate}<br>"
+                    f"Translate:<br>&nbsp;&nbsp;&nbsp;&nbsp;{translate}<br>----------------------------<br>"
 
         template['back'] = back
         return template
+
+    @staticmethod
+    def add_syn_and_example(syn: dict, example: dict, translate: str) -> str:
+        if syn is not None:
+            syn_string = ', '.join([word['text'] for word in syn])
+            translate += f"&nbsp;(Synonyms: {syn_string})"
+
+        if example is not None:
+            example_string = '<br>'.join(
+                ['&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
+                 + word['text'] + ' - ' + word['tr'][0]['text'] for word in example]
+            )
+            translate += f"<br>{example_string}<br>"
+
+        translate += '<br>&nbsp;&nbsp;&nbsp;&nbsp;'
+        return translate
 
     @staticmethod
     def __validate_by_content(response_content: dict):
