@@ -54,8 +54,8 @@ class JsonYandexMessageTemplate(AbstractMessageTemplate):
                 syn = tr.get('syn')
                 example = tr.get('ex')
                 translate = self.add_syn_and_example(syn, example, translate)
-
-            back += f"Part of speech: {pos['pos']}<br>" \
+            part_of_speech = pos.get('pos', 'None part of speech')
+            back += f"Part of speech: {part_of_speech}<br>" \
                     f"Translate:<br>&nbsp;&nbsp;&nbsp;&nbsp;{translate}<br>----------------------------<br>"
 
         template['back'] = back
