@@ -2,6 +2,7 @@ from requests import Response, post
 
 from extensions.exceptions.translator_exceptions import (
     GetUrlException, ResponseValidateException)
+from extensions.user_data_transfer_object import UserDataTransferObject
 from translator.abstract_translator import AbstractTranslator
 
 
@@ -13,13 +14,13 @@ class YandexTranslator(AbstractTranslator):
         super(YandexTranslator, self).__init__(settings=settings)
         self.data_creator = YandexDataCreator(settings)
 
-    def get_response(self, text_to_translate) -> Response:
+    def get_response(self, user_data: UserDataTransferObject) -> Response:
         """
         Get response from remote API
-        :param text_to_translate: text to send at API
+        :param user_data: user given data
         :return: response from Yandex
         """
-        data = self.data_creator.data_to_send(text_to_translate)
+        data = self.data_creator.data_to_send(user_data)
         url = self.data_creator.get_url_to_send()
         response = post(url=url, data=data)
         self.response_validate(response)
@@ -41,15 +42,15 @@ class YandexDataCreator:
     def __init__(self, settings):
         self.settings = settings
 
-    def data_to_send(self, text_to_translate) -> dict:
+    def data_to_send(self, user_data: UserDataTransferObject) -> dict:
         """
         Create data to send at API
-        :param text_to_translate: text to send at API
+        :param user_data: user given data
         :return: dict with data
         """
         data = {
             'key': self.settings.api_key,
-            'text': text_to_translate,
+            'text': user_data.text_to_translate,
             'lang': self.get_language_to_send(),
             'ui': 'en'
         }

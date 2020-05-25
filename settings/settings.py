@@ -46,17 +46,6 @@ class Settings:
 
     def get_external_settings(self):
         with open('config.txt', 'r') as f:
-            for line in f:
-                new_line = line.strip().split('=')
-                if new_line[0] == 'api_key':
-                    self.api_key = new_line[1]
-                elif new_line[0] == 'lang_from':
-                    self.lang_from = new_line[1]
-                elif new_line[0] == 'lang_to':
-                    self.lang_to = new_line[1]
-                elif new_line[0] == 'anki_model_name':
-                    self.anki_model_name = new_line[1]
-                elif new_line[0] == 'anki_deck_name':
-                    self.anki_deck_name = new_line[1]
-                elif new_line[0] == 'anki_host':
-                    self.anki_host = new_line[1]
+            external_settings = {line[0]: line[1] for line in map(lambda line: line.strip().split('='), f)}
+            for setting, value in external_settings.items():
+                setattr(self, setting, value)
