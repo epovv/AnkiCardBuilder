@@ -45,7 +45,11 @@ class Settings:
         return anki_action_by_user_action
 
     def get_external_settings(self):
-        with open('config.txt', 'r') as f:
-            external_settings = {line[0]: line[1] for line in map(lambda line: line.strip().split('='), f)}
-            for setting, value in external_settings.items():
-                setattr(self, setting, value)
+        try:
+            with open('config.txt', 'r') as f:
+                for setting, value in map(lambda line: line.strip().split('='), f):
+                    setattr(self, setting, value)
+        except Exception as e:
+            print(f'Problems with config.txt file fix the problem and restart the script\n'
+                  f'Exception: {e}')
+            pass
